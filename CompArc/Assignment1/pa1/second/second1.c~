@@ -1,0 +1,98 @@
+/* Implement a hash table containing integers. Hash table has 10k buckets. Use chaining with a linked list to handle a collision. */
+
+#include <stdlib.h>
+#include <stdio.h>
+
+
+/* Create a struct */
+struct Node {
+  int value;
+  struct Node* next;
+};
+
+
+int CreateKey(int value){
+  int  key = value % 10000;
+  return key;
+}
+
+struct Node* CreateNode(int value){
+  struct Node* node = (struct Node*) malloc(sizeof(struct Node));
+  node->val = value;
+  node->next = (struct Node*)NULL;
+  return node;
+}
+/* the issue here is that i dont think i am setting node->next) */
+void InsertNode(struct Node* node, int value){
+  if(node == NULL){
+    node = CreateNode(value);
+    printf("inserted\n");
+  }
+  else if(node->val == value){
+    printf("duplicate\n");
+  }
+  else{
+    if (node->next == NULL){
+      node->next = CreateNode(value);
+      printf("inserted\n");
+    }
+    else{
+      InsertNode(node->next,value);
+    }
+  }
+}
+/* goes through the linked list starting at array element hashTable[key] looking for value */
+void SearchNode(struct Node* node,int value){
+  if(node == NULL){
+    printf("absent\n");
+  }
+  else if (node->val == value){
+    printf("present\n");
+  }
+  else{  
+    SearchNode(node->next,value);
+  }
+}
+
+
+/* main */
+int main(int argc, char ** argv){
+  if (argc != 2){
+    printf("Unexpected number of arguments:(%d)\n", argc);
+    return 0;
+  }
+
+  FILE* fp = fopen(argv[1],"r");
+  if (fp==NULL){
+    return 0;
+  }
+  
+  struct Node** hashTable = (struct Node**)malloc(sizeof(struct Node*)*10000);
+  int i;
+  struct Node* temp;
+  temp = (struct Node*)NULL;
+  for(i = 0;i<10000;i++){
+    *(hashTable+i)=temp ;
+  }
+
+
+  char ch;
+  int value; 
+  while(fscanf(fp, "%c%*s%d", &ch, &value) != EOF){
+    int key = CreateKey(value);
+    printf("%c",ch);
+    if (ch == 'i'){
+      InsertNode(hashTable[key],value);
+    }
+    else if (ch == 's'){
+      SearchNode(*(hashTable+key),value);
+    }
+    else continue;
+  }
+
+  fclose(fp);
+  for(i=0; i<10000;i++){
+    free(hashTable[i]);
+  }
+  return 0;
+}

@@ -1,0 +1,12 @@
+/*
+Array and Sorting:
+Write a program that will read and sort the given array. Cannot use library functions, but any algorith is acceptable. 
+ */
+
+#include <stdlib.h>
+#include <stdio.h>
+
+int main(int argc, char** argv){
+
+
+}

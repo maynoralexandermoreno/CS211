@@ -1,0 +1,1 @@
+/* Implement a hash table containing integers. Hash table has 10k buckets. Use chaining with a linked list to handle a collision. 
